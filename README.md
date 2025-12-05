@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Pharmacy Management System
 
 Application desktop JavaFX pour la gestion de stock de médicaments avec authentification et contrôle d'accès par rôles.
@@ -102,3 +103,6 @@ Lancer `Main.java` pour créer automatiquement :
 
 - Produit → Categorie (Foreign Key)
 
+=======
+# Gestion-de-Stock-d-une-Pharmacie
+>>>>>>> 39c2c8ffd7d68cb7f032b0921735a5e5b9768066

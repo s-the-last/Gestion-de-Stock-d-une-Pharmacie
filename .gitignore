@@ -1,30 +1,14 @@
-### IntelliJ IDEA ###
+# Fichiers compilés (générés automatiquement)
 out/
-!**/src/main/**/out/
-!**/src/test/**/out/
-.kotlin
+*.class
 
-### Eclipse ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# Base de données (optionnel)
+database/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
+# Fichiers IDE
+.idea/
+*.iml
 
-### VS Code ###
-.vscode/
-
-### Mac OS ###
+# Fichiers système
 .DS_Store
+Thumbs.db
