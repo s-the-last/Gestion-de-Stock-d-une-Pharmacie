@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.s4m.pharmacy.ui.LoginController"
+      spacing="12" alignment="CENTER" prefWidth="360" prefHeight="240">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Connexion" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+    <VBox spacing="8" prefWidth="260">
+        <Label text="Email"/>
+        <TextField fx:id="emailField" promptText="admin@pharmacy.com"/>
+
+        <Label text="Mot de passe"/>
+        <PasswordField fx:id="passwordField" promptText="admin123"/>
+    </VBox>
+
+    <Button text="Se connecter" onAction="#handleLogin" prefWidth="200"/>
+
+    <Label fx:id="statusLabel" textFill="crimson"/>
+</VBox>
+

@@ -41,7 +41,7 @@ public class CategoryService {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur lors de l'ajout de la catégorie : " + e.getMessage());
         }
         return -1;
     }
@@ -86,7 +86,7 @@ public class CategoryService {
             pstmt.setInt(3, category.getId());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur lors de la modification de la catégorie : " + e.getMessage());
         }
         return false;
     }
@@ -114,7 +114,7 @@ public class CategoryService {
                 return rs.next() ? creerCategorieDepuisResultSet(rs) : null;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur SQL : " + e.getMessage());
             return null;
         }
     }
@@ -132,7 +132,7 @@ public class CategoryService {
                 while (rs.next()) list.add(creerCategorieDepuisResultSet(rs));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur SQL : " + e.getMessage());
         }
         return list;
     }
@@ -143,7 +143,7 @@ public class CategoryService {
             setter.set(pstmt);
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur SQL : " + e.getMessage());
             return false;
         }
     }

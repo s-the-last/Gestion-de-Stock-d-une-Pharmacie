@@ -1,0 +1,9 @@
+# Configuration de la base de données
+# Copiez ce fichier en "database.properties" et modifiez les valeurs selon votre environnement
+
+db.host=localhost
+db.port=3306
+db.database=pharmacy_db
+db.username=root
+db.password=
+

@@ -22,7 +22,7 @@ public class PasswordHasher {
             }
             return sb.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Erreur lors du hashage du mot de passe : " + e.getMessage());
             return null;
         }
     }

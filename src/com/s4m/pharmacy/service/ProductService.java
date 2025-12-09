@@ -44,7 +44,7 @@ public class ProductService {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur lors de l'ajout du produit : " + e.getMessage());
         }
         return -1;
     }
@@ -113,7 +113,7 @@ public class ProductService {
             pstmt.setInt(7, product.getId());
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur lors de la modification du produit : " + e.getMessage());
         }
         return false;
     }
@@ -156,7 +156,7 @@ public class ProductService {
                 return rs.next() ? creerProduitDepuisResultSet(rs) : null;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur SQL : " + e.getMessage());
             return null;
         }
     }
@@ -174,7 +174,7 @@ public class ProductService {
                 while (rs.next()) list.add(creerProduitDepuisResultSet(rs));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur SQL : " + e.getMessage());
         }
         return list;
     }
@@ -185,7 +185,7 @@ public class ProductService {
             setter.set(pstmt);
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur SQL : " + e.getMessage());
             return false;
         }
     }

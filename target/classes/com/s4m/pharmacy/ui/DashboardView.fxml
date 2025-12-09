@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.Region?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.s4m.pharmacy.ui.DashboardController"
+            prefWidth="960" prefHeight="600">
+
+    <top>
+        <HBox spacing="12" alignment="CENTER_LEFT">
+            <padding>
+                <Insets top="12" right="12" bottom="12" left="12"/>
+            </padding>
+            <Label fx:id="welcomeLabel" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+            <Button text="Déconnexion" onAction="#handleLogout"/>
+        </HBox>
+    </top>
+
+    <center>
+        <TabPane fx:id="tabPane">
+            <!-- Onglet Produits -->
+            <Tab text="Produits" closable="false">
+                <BorderPane>
+                    <center>
+                        <VBox spacing="8">
+                            <padding><Insets top="8" right="12" bottom="12" left="12"/></padding>
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label text="Produits" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                                <Button text="Rafraîchir" onAction="#refreshProduits"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="Rechercher:"/>
+                                <TextField fx:id="productSearchField" promptText="Nom ou description..." prefWidth="200"/>
+                            </HBox>
+                            <TableView fx:id="productTable" prefHeight="320">
+                                <columns>
+                                    <TableColumn fx:id="colNom" text="Nom" prefWidth="180"/>
+                                    <TableColumn fx:id="colPrix" text="Prix" prefWidth="90"/>
+                                    <TableColumn fx:id="colQuantite" text="Quantité" prefWidth="80"/>
+                                    <TableColumn fx:id="colExpiration" text="Expiration" prefWidth="110"/>
+                                    <TableColumn fx:id="colCategorie" text="Catégorie" prefWidth="120"/>
+                                </columns>
+                            </TableView>
+                            <Label fx:id="productStatus" textFill="crimson"/>
+                        </VBox>
+                    </center>
+                    <right>
+                        <VBox spacing="8" prefWidth="280">
+                            <padding><Insets top="12" right="12" bottom="12" left="0"/></padding>
+                            <Label text="Ajouter / Modifier" style="-fx-font-weight: bold;"/>
+                            <Label text="Nom"/>
+                            <TextField fx:id="productNameField" promptText="Ex: Paracétamol"/>
+                            <Label text="Description"/>
+                            <TextArea fx:id="productDescField" prefRowCount="3"/>
+                            <HBox spacing="8">
+                                <VBox spacing="4">
+                                    <Label text="Prix"/>
+                                    <TextField fx:id="productPriceField" promptText="3.50"/>
+                                </VBox>
+                                <VBox spacing="4">
+                                    <Label text="Quantité"/>
+                                    <TextField fx:id="productQtyField" promptText="100"/>
+                                </VBox>
+                            </HBox>
+                            <Label text="Date d'expiration"/>
+                            <DatePicker fx:id="productDateField"/>
+                            <Label text="Catégorie"/>
+                            <ComboBox fx:id="productCategoryCombo" promptText="Choisir..."/>
+                            <HBox spacing="8">
+                                <Button text="Ajouter" onAction="#addProduit" prefWidth="80"/>
+                                <Button text="Modifier" onAction="#updateProduit" prefWidth="80"/>
+                                <Button text="Supprimer" onAction="#deleteProduit" prefWidth="80"/>
+                            </HBox>
+                        </VBox>
+                    </right>
+                </BorderPane>
+            </Tab>
+
+            <!-- Onglet Catégories -->
+            <Tab text="Catégories" closable="false">
+                <BorderPane>
+                    <center>
+                        <VBox spacing="8">
+                            <padding><Insets top="8" right="12" bottom="12" left="12"/></padding>
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label text="Catégories" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                                <Button text="Rafraîchir" onAction="#refreshCategories"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="Rechercher:"/>
+                                <TextField fx:id="categorySearchField" promptText="Nom ou description..." prefWidth="200"/>
+                            </HBox>
+                            <TableView fx:id="categoryTable" prefHeight="320">
+                                <columns>
+                                    <TableColumn fx:id="catNomCol" text="Nom" prefWidth="200"/>
+                                    <TableColumn fx:id="catDescCol" text="Description" prefWidth="260"/>
+                                </columns>
+                            </TableView>
+                            <Label fx:id="categoryStatus" textFill="crimson"/>
+                        </VBox>
+                    </center>
+                    <right>
+                        <VBox spacing="8" prefWidth="260">
+                            <padding><Insets top="12" right="12" bottom="12" left="0"/></padding>
+                            <Label text="Ajouter / Modifier" style="-fx-font-weight: bold;"/>
+                            <Label text="Nom"/>
+                            <TextField fx:id="categoryNameField" promptText="Antibiotiques"/>
+                            <Label text="Description"/>
+                            <TextField fx:id="categoryDescField" promptText="Description courte"/>
+                            <HBox spacing="8">
+                                <Button text="Ajouter" onAction="#addCategorie" prefWidth="80"/>
+                                <Button text="Modifier" onAction="#updateCategorie" prefWidth="80"/>
+                                <Button text="Supprimer" onAction="#deleteCategorie" prefWidth="80"/>
+                            </HBox>
+                        </VBox>
+                    </right>
+                </BorderPane>
+            </Tab>
+
+            <!-- Onglet Utilisateurs -->
+            <Tab fx:id="userTab" text="Utilisateurs" closable="false">
+                <BorderPane>
+                    <center>
+                        <VBox spacing="8">
+                            <padding><Insets top="8" right="12" bottom="12" left="12"/></padding>
+                            <HBox alignment="CENTER_LEFT" spacing="8">
+                                <Label text="Utilisateurs" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+                                <Button text="Rafraîchir" onAction="#refreshUsers"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label text="Rechercher:"/>
+                                <TextField fx:id="userSearchField" promptText="Nom ou email..." prefWidth="200"/>
+                            </HBox>
+                            <TableView fx:id="userTable" prefHeight="320">
+                                <columns>
+                                    <TableColumn fx:id="userNomCol" text="Nom" prefWidth="160"/>
+                                    <TableColumn fx:id="userEmailCol" text="Email" prefWidth="220"/>
+                                    <TableColumn fx:id="userRoleCol" text="Rôle" prefWidth="80"/>
+                                </columns>
+                            </TableView>
+                            <Label fx:id="userStatus" textFill="crimson"/>
+                        </VBox>
+                    </center>
+                    <right>
+                        <VBox spacing="8" prefWidth="260">
+                            <padding><Insets top="12" right="12" bottom="12" left="0"/></padding>
+                            <Label text="Ajouter / Modifier" style="-fx-font-weight: bold;"/>
+                            <Label text="Nom"/>
+                            <TextField fx:id="userNameField" promptText="Nom"/>
+                            <Label text="Email"/>
+                            <TextField fx:id="userEmailField" promptText="email@pharmacy.com"/>
+                            <Label text="Mot de passe (ajout)"/>
+                            <PasswordField fx:id="userPasswordField" promptText="Mot de passe"/>
+                            <Label text="Rôle"/>
+                            <ComboBox fx:id="userRoleCombo" promptText="Choisir..."/>
+                            <HBox spacing="8">
+                                <Button text="Ajouter" onAction="#addUser" prefWidth="80"/>
+                                <Button text="Modifier" onAction="#updateUser" prefWidth="80"/>
+                                <Button text="Supprimer" onAction="#deleteUser" prefWidth="80"/>
+                            </HBox>
+                        </VBox>
+                    </right>
+                </BorderPane>
+            </Tab>
+        </TabPane>
+    </center>
+
+</BorderPane>
+

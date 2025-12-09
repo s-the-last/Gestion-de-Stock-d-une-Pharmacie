@@ -10,52 +10,63 @@ import java.sql.Statement;
  */
 public class DatabaseConnection {
     
-    private static final String URL = "jdbc:mysql://localhost:3306/pharmacy_db?useSSL=false&serverTimezone=UTC&characterEncoding=utf8mb4";
-    private static final String URL_SANS_DB = "jdbc:mysql://localhost:3306?useSSL=false&serverTimezone=UTC&characterEncoding=utf8mb4";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    private static final DatabaseConfig config = new DatabaseConfig();
+    private static boolean driverLoaded = false;
+    
+    static {
+        loadDriver();
+    }
+    
+    private static void loadDriver() {
+        if (!driverLoaded) {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                driverLoaded = true;
+            } catch (ClassNotFoundException e) {
+                System.err.println("Erreur : Driver MySQL non trouvé. Vérifiez que mysql-connector-j est dans les dépendances.");
+            }
+        }
+    }
     
     public DatabaseConnection() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        // Driver déjà chargé dans le bloc static
     }
     
     /**
      * Retourne une connexion à la base de données
      */
     public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        return DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword());
     }
     
     /**
      * Initialise la base de données : crée la BD, les tables et insère les données par défaut
      */
     public static void initialiser() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+        loadDriver();
+        
+        try (Connection conn = DriverManager.getConnection(config.getUrlWithoutDatabase(), config.getUsername(), config.getPassword());
+             Statement stmt = conn.createStatement()) {
             
-            try (Connection conn = DriverManager.getConnection(URL_SANS_DB, USERNAME, PASSWORD);
-                 Statement stmt = conn.createStatement()) {
-                
-                stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS pharmacy_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-                System.out.println("Base de données 'pharmacy_db' créée ou déjà existante");
-            }
+            stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS " + config.getDatabase() + " CHARACTER SET utf8 COLLATE utf8_general_ci");
+            System.out.println("Base de données '" + config.getDatabase() + "' créée ou déjà existante");
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la création de la base de données : " + e.getMessage());
+            return;
+        }
+        
+        try (Connection conn = DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword());
+             Statement stmt = conn.createStatement()) {
             
-            try (Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                 Statement stmt = conn.createStatement()) {
-                
-                stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Categorie (" +
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Categorie (" +
                         "id INT PRIMARY KEY AUTO_INCREMENT, " +
                         "nom VARCHAR(100) NOT NULL UNIQUE, " +
                         "description TEXT, " +
                         "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                         "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
-                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
-                
-                stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Utilisateur (" +
+                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+            
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Utilisateur (" +
                         "id INT PRIMARY KEY AUTO_INCREMENT, " +
                         "nom VARCHAR(100) NOT NULL, " +
                         "email VARCHAR(150) NOT NULL UNIQUE, " +
@@ -63,9 +74,9 @@ public class DatabaseConnection {
                         "role ENUM('ADMIN', 'USER') NOT NULL DEFAULT 'USER', " +
                         "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
                         "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" +
-                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
-                
-                stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Produit (" +
+                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+            
+            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS Produit (" +
                         "id INT PRIMARY KEY AUTO_INCREMENT, " +
                         "nom VARCHAR(150) NOT NULL, " +
                         "description TEXT, " +
@@ -77,15 +88,14 @@ public class DatabaseConnection {
                         "updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, " +
                         "FOREIGN KEY (id_categorie) REFERENCES Categorie(id) ON DELETE RESTRICT ON UPDATE CASCADE, " +
                         "INDEX idx_nom (nom), INDEX idx_date_expiration (date_expiration), INDEX idx_categorie (id_categorie)" +
-                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci");
+                        ") ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
                 
-                System.out.println("Tables créées ou déjà existantes");
-                insererDonneesParDefaut(conn);
-            }
+            System.out.println("Tables créées ou déjà existantes");
+            insererDonneesParDefaut(conn);
             
             System.out.println("Initialisation terminée avec succès !");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'initialisation de la base de données : " + e.getMessage());
         }
     }
     
@@ -124,7 +134,7 @@ public class DatabaseConnection {
                 System.out.println("Produits de test insérés");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("Erreur lors de l'insertion des données par défaut : " + e.getMessage());
         }
     }
 }
