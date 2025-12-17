@@ -1,196 +1,195 @@
 # Pharmacy Management System
 
-Application desktop JavaFX pour la gestion de stock de médicaments avec authentification et contrôle d'accès par rôles.
+Application desktop JavaFX pour la gestion du stock de médicaments avec authentification et contrôle d’accès par rôles.
 
-## Technologies
+---
 
-- **Java 17** (compatible Java 11+)
-- **JavaFX 21** (interface graphique)
-- **MySQL 8+** (base de données)
-- **Maven** (gestion des dépendances)
-- **JDBC** (connexion base de données)
+## 🎯 Présentation du projet
 
-## Structure du Projet
+Le **Pharmacy Management System** est une application desktop développée en Java permettant de gérer efficacement le stock d’une pharmacie. Elle propose une interface graphique intuitive, une authentification sécurisée et une gestion des droits selon le rôle de l’utilisateur (Administrateur ou Utilisateur).
+
+Les principales fonctionnalités incluent la gestion des produits, des catégories et des utilisateurs, ainsi qu’un contrôle strict de l’accès aux fonctionnalités sensibles.
+
+---
+
+## 🛠️ Technologies utilisées
+
+* **Java 17**
+* **JavaFX 21** (interface graphique)
+* **MySQL 8+** (base de données)
+* **Maven** (gestion des dépendances)
+* **JDBC** (connexion à la base de données)
+* **IntelliJ IDEA** (environnement de développement)
+
+---
+
+## 📁 Structure du projet
 
 ```
-src/com/s4m/pharmacy/
-├── db/
-│   ├── DatabaseConnection.java      # Connexion MySQL + initialisation BD
-│   └── DatabaseConfig.java          # Configuration depuis fichier properties
-├── model/
-│   ├── Category.java                # Modèle Catégorie
-│   ├── Product.java                 # Modèle Produit
-│   └── User.java                    # Modèle Utilisateur (avec Role)
-├── service/
-│   ├── AuthService.java             # Authentification (login/logout)
-│   ├── CategoryService.java         # CRUD Catégories
-│   ├── ProductService.java          # CRUD Produits
-│   └── UserService.java             # CRUD Utilisateurs
-├── util/
-│   └── PasswordHasher.java          # Hashage SHA-256
-├── ui/
-│   ├── PharmacyApp.java             # Application JavaFX principale
-│   ├── LoginController.java         # Contrôleur écran de connexion
-│   ├── LoginView.fxml               # Vue de connexion
-│   ├── DashboardController.java     # Contrôleur tableau de bord
-│   └── DashboardView.fxml           # Vue tableau de bord (onglets)
-├── Main.java                        # Point d'entrée console (init BD)
-└── TestPharmacy.java                # Tests des modèles
+Gestion-de-Stock-d-une-Pharmacie
+├── src/
+│   └── com/s4m/pharmacy/
+│       ├── db/            # Connexion et configuration MySQL
+│       ├── model/         # Modèles (Product, Category, User)
+│       ├── service/       # Logique métier (CRUD, authentification)
+│       ├── util/          # Outils (hashage mot de passe)
+│       └── ui/            # JavaFX (contrôleurs + vues FXML)
+├── target/                # Généré par Maven
+├── pom.xml                # Configuration Maven
+├── database.properties    # Configuration base de données (optionnel)
+└── README.md
 ```
 
-## Configuration Base de Données
+---
 
-### Option 1 : Fichier de configuration (recommandé)
+## 🧩 Fonctionnalités principales
 
-1. Copiez `database.properties.example` en `database.properties`
-2. Modifiez les valeurs selon votre environnement :
+### 🔐 Authentification
+
+* Connexion sécurisée par e-mail et mot de passe
+* Mots de passe hashés avec **SHA-256**
+* Gestion de session utilisateur
+
+### 📦 Gestion du stock
+
+* Ajouter, modifier et supprimer des produits
+* Gestion des quantités et dates d’expiration
+* Détection des produits à stock faible
+
+### 🗂️ Gestion des catégories
+
+* CRUD des catégories
+* Interdiction de supprimer une catégorie liée à un produit
+
+### 👥 Gestion des utilisateurs
+
+* Réservée aux administrateurs
+* Création, modification et suppression de comptes
+* Gestion des rôles (ADMIN / USER)
+
+### 🔎 Autres fonctionnalités
+
+* Recherche en temps réel
+* Validation des formulaires
+* Messages d’erreur clairs
+* Confirmation avant suppression
+
+---
+
+## 🗄️ Base de données
+
+### Tables principales
+
+* **Utilisateur** : id, nom, email, mot_de_passe (hashé), rôle, dates
+* **Categorie** : id, nom, description, dates
+* **Produit** : id, nom, description, prix, quantité, date d’expiration, catégorie
+
+### Relations
+
+* Un produit appartient à une catégorie
+* Contrainte de clé étrangère avec restriction à la suppression
+
+### Initialisation automatique
+
+Au lancement, l’application :
+
+* Crée la base de données si elle n’existe pas
+* Crée les tables nécessaires
+* Insère des données de test (utilisateurs, catégories, produits)
+
+---
+
+## ⚙️ Configuration de la base de données
+
+### Méthode recommandée
+
+1. Copier le fichier `database.properties.example`
+2. Le renommer en `database.properties`
+3. Adapter les valeurs :
 
 ```properties
 db.host=localhost
 db.port=3306
 db.database=pharmacy_db
 db.username=root
-db.password=votre_mot_de_passe
+db.password=
 ```
 
-Si le fichier `database.properties` n'existe pas, l'application utilise les valeurs par défaut (localhost, root, mot de passe vide).
+Si le fichier n’existe pas, des valeurs par défaut sont utilisées.
 
-### Option 2 : Modification directe du code
+---
 
-Modifiez `DatabaseConnection.java` si vous préférez (non recommandé pour la production).
-
-## Installation et Lancement
+## ▶️ Installation et lancement (IntelliJ IDEA)
 
 ### Prérequis
 
-- **JDK 17+** installé
-- **MySQL** installé et démarré
-- **Maven** installé (ou utilisez le wrapper Maven)
+* IntelliJ IDEA (2020.3 ou plus récent)
+* JDK 17 ou supérieur
+* MySQL démarré
+* Maven (intégré à IntelliJ)
 
 ### Étapes
 
-1. **Cloner ou télécharger le projet**
+1. Ouvrir IntelliJ IDEA
+2. **File → Open** et sélectionner le dossier du projet
+3. Importer le projet comme **Maven Project**
+4. Configurer le **JDK 17** :
 
-2. **Configurer la base de données** (voir section Configuration ci-dessus)
+    * File → Project Structure → Project SDK
+5. Synchroniser Maven (Reload Maven Project)
 
-3. **Lancer l'application JavaFX** :
-   ```bash
-   mvn clean javafx:run
-   ```
+### Lancer l’application (recommandé)
 
-   Ou avec le wrapper Maven :
-   ```bash
-   ./mvnw clean javafx:run
-   ```
+Via Maven :
 
-4. **Se connecter** avec un compte par défaut :
-   - **Admin** : `admin@pharmacy.com` / `admin123`
-   - **User** : `user@pharmacy.com` / `admin123`
+```bash
+mvn clean javafx:run
+```
 
-## Fonctionnalités
+Ou en utilisant la configuration Run Maven dans IntelliJ :
 
-### Interface Graphique
+* Command line : `clean javafx:run`
 
-- ✅ **Écran de connexion** avec validation
-- ✅ **Tableau de bord** avec onglets :
-  - **Produits** : Liste, ajout, modification, suppression
-  - **Catégories** : Liste, ajout, modification, suppression
-  - **Utilisateurs** : Visible uniquement pour les admins
-- ✅ **Recherche en temps réel** dans toutes les tables
-- ✅ **Validation des formulaires** (champs obligatoires, formats)
-- ✅ **Confirmations avant suppression**
-- ✅ **Gestion d'erreurs** avec messages clairs
-- ✅ **Formatage** : prix en euros, dates au format français
-- ✅ **Contrôle d'accès** : onglet Utilisateurs masqué pour les non-admins
+---
 
-### Services Backend
+## 👤 Comptes de test
 
-**AuthService**
-- `seConnecter(email, motDePasse)` : Authentification
-- `seDeconnecter()` : Déconnexion
-- `getUtilisateurConnecte()` : Utilisateur actuel
-- `estAdmin()` : Vérification rôle admin
+* **Administrateur** : `admin@pharmacy.com` / `admin123`
+* **Utilisateur** : `user@pharmacy.com` / `admin123`
 
-**CategoryService**
-- `ajouterCategorie(category)`
-- `modifierCategorie(category)`
-- `supprimerCategorie(id)`
-- `listerToutesLesCategories()`
-- `rechercherCategories(terme)`
+---
 
-**ProductService**
-- `ajouterProduit(product)`
-- `modifierProduit(product)`
-- `supprimerProduit(id)`
-- `listerTousLesProduits()`
-- `rechercherProduitsParNom(terme)`
-- `getProduitsStockBas()` : Produits avec stock < 10
+## 🧪 Tests
 
-**UserService**
-- `ajouterUtilisateur(user, motDePasseClair)`
-- `modifierUtilisateur(user)`
-- `supprimerUtilisateur(id)`
-- `listerTousLesUtilisateurs()`
-- `modifierMotDePasse(userId, nouveauMotDePasse)`
+Des scénarios de tests fonctionnels ont été réalisés afin de vérifier :
 
-## Architecture
+* L’authentification
+* La gestion du stock
+* Le contrôle d’accès par rôles
+* La validation des données
 
-- **Modèles** : Classes POJO représentant les entités (Product, Category, User)
-- **Services** : Logique métier et accès base de données (CRUD, validation)
-- **UI** : Contrôleurs JavaFX et vues FXML
-- **DB** : Gestion connexion MySQL et initialisation automatique
+Les résultats montrent un fonctionnement conforme aux attentes.
 
-## Base de Données
+---
 
-### Tables
+## 📦 Compilation
 
-- **Categorie** : id, nom, description, created_at, updated_at
-- **Utilisateur** : id, nom, email, mot_de_passe (hashé SHA-256), role (ADMIN/USER), created_at, updated_at
-- **Produit** : id, nom, description, prix, quantite, date_expiration, id_categorie, created_at, updated_at
-
-### Relations
-
-- Produit → Categorie (Foreign Key avec ON DELETE RESTRICT)
-
-### Initialisation
-
-L'application crée automatiquement :
-- La base de données si elle n'existe pas
-- Les tables si elles n'existent pas
-- Les données par défaut (catégories, utilisateurs, produits de test) si les tables sont vides
-
-## Développement
-
-### Compiler le projet
+Compiler le projet :
 
 ```bash
 mvn clean compile
 ```
 
-### Créer un JAR exécutable
+Créer un JAR exécutable :
 
 ```bash
 mvn clean package
 ```
 
-Le JAR sera créé dans `target/pharmacy-1.0-SNAPSHOT.jar`
+Le fichier JAR est généré dans le dossier `target/`.
 
-### Structure Maven
+---
 
-Le projet utilise Maven avec :
-- JavaFX Maven Plugin pour lancer l'application
-- Dépendances : JavaFX Controls, JavaFX FXML, MySQL Connector
+## ✅ Conclusion
 
-## Notes
-
-- Les mots de passe sont hashés avec SHA-256
-- Les utilisateurs non-admin ne peuvent pas accéder à la gestion des utilisateurs
-- Les catégories liées à des produits ne peuvent pas être supprimées (contrainte de clé étrangère)
-- La recherche fonctionne en temps réel sur les noms et descriptions
-
-## Support
-
-Pour toute question ou problème, vérifiez :
-1. Que MySQL est démarré
-2. Que les identifiants dans `database.properties` sont corrects
-3. Que JDK 17+ est installé et configuré
+Ce projet propose une solution complète et sécurisée pour la gestion du stock d’une pharmacie. L’architecture claire, l’utilisation de JavaFX et de Maven, ainsi que la gestion des rôles permettent une application fiable, évolutive et adaptée à un contexte professionnel.
